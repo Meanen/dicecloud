@@ -1,20 +1,23 @@
 // ==UserScript==
-// @name     dicecloud
-// @version  1
-// @grant       GM.setValue
-// @grant       GM.getValue
+// @name         dicecloud
+// @version      1.0.1
+// @license      MIT (https://opensource.org/licenses/MIT)
+// @updateURL    https://raw.githubusercontent.com/Meanen/dicecloud/master/dicecloud-tempermonkey.js
+// @downloadURL  https://raw.githubusercontent.com/Meanen/dicecloud/master/dicecloud-tempermonkey.js
+// @grant        GM.setValue
+// @grant        GM.getValue
 // @match        https://dicecloud.com/character/*
 // ==/UserScript==
 
 let hiddenContainers;
 
 const getContainers = () => [
-  document.getElementsByClassName("itemContainer", "paper-material-0"),
-  document.getElementsByClassName("equipmentContainer"),
+  document.getElementsByClassName('itemContainer', 'paper-material-0'),
+  document.getElementsByClassName('equipmentContainer'),
   // Feature tab
   [
-    document.getElementsByClassName("card", "paper-material-0")[6],
-    document.getElementsByClassName("card", "paper-material-0")[7]
+    document.getElementsByClassName('card', 'paper-material-0')[6],
+    document.getElementsByClassName('card', 'paper-material-0')[7]
   ]
 ];
 
@@ -36,19 +39,21 @@ const hideOnInit = container => {
 }
 
 const addButton = container => {
-  const btn = document.createElement("BUTTON");
-  btn.innerHTML = "hide";
-  btn.setAttribute("class","hide-button");
-  btn.onclick = toggleVisibility;
+  const btn = document.createElement('BUTTON');
+  container.setAttribute('style', 'position:relative')
+  btn.innerHTML = 'hide';
+  btn.setAttribute('class','hide-button');
+  btn.setAttribute('style', 'position:absolute;top:0;right:0')
+  btn.onclick = clickToggle;
   container.appendChild(btn);
 }
 
-const toggleVisibility = event => toggleContainer(event.target.parentElement, true);
+const clickToggle = event => toggleContainer(event.target.parentElement, true);
 
 const toggleContainer = (container, save) => {
   const sibling = container.children[1];
   sibling.hidden = !sibling.hidden;
-  container.children[2].innerHTML = sibling.hidden ? "show" : "hide";
+  container.children[2].innerHTML = sibling.hidden ? 'show' : 'hide';
   if (save) {
     const id = container.attributes['data-id'].nodeValue;
     if (contains(id)) {
@@ -80,9 +85,9 @@ async function update(val) {
 
 const setContainers = containers => {
   if (typeof containers === 'string') {
-  	hiddenContainers = JSON.parse(containers);
+    hiddenContainers = JSON.parse(containers);
   } else {
-  	hiddenContainers = containers;
+    hiddenContainers = containers;
   }
 };
 
